@@ -1,0 +1,63 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<input type="button" value="Login" class="btn btn-default" (click)="login()" />
+<input type="button" value="Logout" class="btn btn-default" (click)="logout()" />
+<input type="button" value="Google" class="btn btn-default" (click)="google()" />
+<h1>Список пользователей</h1>
+<input type="button" value="Добавить" class="btn btn-default" (click)="addUser()" />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Username</td>
+            <td>Password</td>
+            <td>Email</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <ng-template [ngTemplateOutlet]="loadTemplate(user)" 
+                        [ngTemplateOutletContext]="{ $implicit: user}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+<div>{{statusMessage}}</div>
+   
+   
+<!--шаблон для чтения-->
+<ng-template #readOnlyTemplate let-user>
+    <td>{{user.Id}}</td>
+    <td>{{user.Username}}</td>
+    <td>{{user.Password}}</td>
+    <td>{{user.Email}}</td>
+    <td>
+        <input type="button" value="Изменить" class="btn btn-default" (click)="editUser(user)" />
+    </td>
+    <td>
+        <input type="button" value="Удалить" (click)="deleteUser(user)" class="btn btn-danger" />
+    </td>
+</ng-template>
+  
+<!--шаблон для редактирования-->
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedUser.Id" readonly disabled class="form-control" />
+    </td>
+    <td>
+        <input type="text" name="username" [(ngModel)]="editedUser.Username" #username="ngModel" required class="form-control" />
+    </td>
+    <td>
+        <input type="text" name="password" [(ngModel)]="editedUser.Password" #password="ngModel" required class="form-control" />
+    </td>
+    <td>
+        <input type="email" name="email" [(ngModel)]="editedUser.Email" #email="ngModel" required email class="form-control" />
+    </td>
+    <td>
+        <input type="button" [disabled]="username.invalid || password.invalid || email.invalid" value="Сохранить" (click)="saveUser()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Отмена" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
